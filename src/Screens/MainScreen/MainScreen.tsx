@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
+import Entry from "../../Components/Entry";
 
 export const MainScreen: React.FC = () => {
   const [buttonPressed, setButtonPressed] = useState<boolean>(false);
@@ -8,28 +9,9 @@ export const MainScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.usernamePasswordContainer}>
-        <View style={styles.usernameContainer}>
-          <Text style={styles.label}>Username</Text>
-          <TextInput style={styles.input} />
-        </View>
-        <View style={styles.passwordContainer}>
-          <Text style={styles.label}>Password</Text>
+        <Entry label="Username" isPassword={false} />
 
-          <TextInput style={styles.input} secureTextEntry={hidePassword} />
-
-          <Pressable
-            style={styles.showPasswordButton}
-            onPress={() => {
-              setHidePassword(!hidePassword);
-            }}
-          >
-            {hidePassword ? (
-              <Text>Show password</Text>
-            ) : (
-              <Text>Hide password</Text>
-            )}
-          </Pressable>
-        </View>
+        <Entry label="Password" isPassword={hidePassword} />
       </View>
       <View style={styles.loginContainer}>
         <Pressable
@@ -50,6 +32,18 @@ export const MainScreen: React.FC = () => {
         >
           <Text style={styles.loginButtonText}>Login</Text>
         </Pressable>
+        <Pressable
+          style={styles.showPasswordButton}
+          onPress={() => {
+            setHidePassword(!hidePassword);
+          }}
+        >
+          {hidePassword ? (
+            <Text>Show password</Text>
+          ) : (
+            <Text>Hide password</Text>
+          )}
+        </Pressable>
       </View>
     </View>
   );
@@ -61,28 +55,6 @@ const styles = StyleSheet.create({
     backgroundColor: "yellow",
     margin: "5px",
   },
-  usernameContainer: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "pink",
-    paddingHorizontal: 20,
-  },
-  passwordContainer: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: "gray",
-    paddingHorizontal: 20,
-  },
-  input: {
-    height: 50,
-    margin: 15,
-    paddingLeft: 15,
-    backgroundColor: "white",
-    borderWidth: 2,
-    borderColor: "black",
-    borderRadius: 15,
-    fontSize: 20,
-  },
   password: {
     height: 50,
     margin: 15,
@@ -92,11 +64,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "green",
     justifyContent: "center",
-  },
-  label: {
-    fontSize: 20,
-    fontWeight: "bold",
-    margin: 5,
   },
   loginContainer: {
     flex: 0.5,
