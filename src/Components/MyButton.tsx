@@ -1,6 +1,7 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Pressable, Text, StyleSheet } from "react-native";
+import { DemoContext } from "../context/DemoContext";
 
 interface IMyBUtton {
   label: string;
