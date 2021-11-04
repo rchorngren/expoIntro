@@ -1,30 +1,42 @@
 import React from "react";
 import { View, StyleSheet, Text, TextInput } from "react-native";
+import { useFonts } from "expo-font";
 
 interface IEntry {
   label: string;
   isPassword: boolean;
+  onTextChange?: (text: string) => void;
+  defaultValue?: string;
 }
 
 const Entry: React.FC<IEntry> = (props) => {
+  const [fontsLoaded] = useFonts({
+    CrazyFont: require("../../assets/fonts/Fruktur-Regular.ttf"),
+  });
+
   return (
-    <View style={styles.usernameContainer}>
-      <Text style={styles.label}>{props.label}</Text>
-      <TextInput style={styles.input} secureTextEntry={props.isPassword} />
+    <View style={styles.entryContainer}>
+      {fontsLoaded && <Text style={styles.label}>{props.label}</Text>}
+
+      <TextInput
+        value={props.defaultValue}
+        style={styles.input}
+        secureTextEntry={props.isPassword}
+        onChangeText={props.onTextChange}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  usernameContainer: {
+  entryContainer: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "pink",
     paddingHorizontal: 20,
   },
   label: {
+    fontFamily: "CrazyFont",
     fontSize: 20,
-    fontWeight: "bold",
     margin: 5,
   },
   input: {

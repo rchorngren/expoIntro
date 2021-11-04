@@ -1,59 +1,84 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import Entry from "../../Components/Entry";
+import { MyButton } from "../../Components/MyButton";
+import { TextButton } from "../../Components/TextButton";
+
+import Logo from "../../../assets/roosterhead.svg";
 
 export const MainScreen: React.FC = () => {
-  const [buttonPressed, setButtonPressed] = useState<boolean>(false);
   const [hidePassword, setHidePassword] = useState<boolean>(true);
+  const [password, setPassword] = useState<string>("");
+
+  const savePassword = async () => {
+    await AsyncStorage.setItem("password", password);
+  };
+
+  const getPassword = async (): Promise<string | null> =>
+    await AsyncStorage.getItem("password");
+
+  useEffect(() => {
+    const init = async () => {
+      const passwordFound = await getPassword();
+      if (passwordFound) {
+        setPassword(passwordFound);
+      }
+    };
+    init();
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.usernamePasswordContainer}>
-        <Entry label="Username" isPassword={false} />
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View
+          style={{
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
+          <Logo width={200} height={200} />
+        </View>
+        <View style={styles.usernamePasswordContainer}>
+          <Entry label="Username" isPassword={false} />
 
-        <Entry label="Password" isPassword={hidePassword} />
-      </View>
-      <View style={styles.loginContainer}>
-        <Pressable
-          style={
-            buttonPressed
-              ? [styles.loginButton, styles.loginButtonPressIn]
-              : styles.loginButton
-          }
-          onPress={() => {
-            // setHidePassword(!hidePassword);
-          }}
-          onPressIn={() => {
-            setButtonPressed(true);
-          }}
-          onPressOut={() => {
-            setButtonPressed(false);
-          }}
-        >
-          <Text style={styles.loginButtonText}>Login</Text>
-        </Pressable>
-        <Pressable
-          style={styles.showPasswordButton}
-          onPress={() => {
-            setHidePassword(!hidePassword);
-          }}
-        >
-          {hidePassword ? (
-            <Text>Show password</Text>
-          ) : (
-            <Text>Hide password</Text>
-          )}
-        </Pressable>
-      </View>
-    </View>
+          <Entry
+            label="Password"
+            isPassword={hidePassword}
+            onTextChange={(text) => setPassword(text)}
+            defaultValue={password}
+          />
+        </View>
+        <View style={styles.loginContainer}>
+          <MyButton
+            label="Login"
+            onPress={async () => {
+              await savePassword();
+              const retrievedPassword = await getPassword();
+              if (retrievedPassword) {
+                alert(retrievedPassword);
+              }
+            }}
+          />
+
+          <TextButton
+            labelOne="Show password"
+            labelTwo="Hide password"
+            onPress={() => setHidePassword(!hidePassword)}
+            toggleValue={hidePassword}
+          />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "yellow",
-    margin: "5px",
+    margin: 5,
+    marginTop: 25,
   },
   password: {
     height: 50,
@@ -61,8 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   usernamePasswordContainer: {
-    flex: 1,
-    backgroundColor: "green",
+    flex: 0.25,
     justifyContent: "center",
   },
   loginContainer: {
@@ -70,24 +94,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     backgroundColor: "white",
   },
-  showPasswordButton: {
-    alignSelf: "center",
-  },
-  loginButton: {
-    height: 50,
-    margin: 5,
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "green",
-  },
-  loginButtonText: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  loginButtonPressIn: {
-    backgroundColor: "red",
-  },
-  loginButtonPressOut: {},
 });
