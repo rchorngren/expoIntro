@@ -1,7 +1,6 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import Entry from "../../Components/Entry";
 import { MyButton } from "../../Components/MyButton";
 import { TextButton } from "../../Components/TextButton";
