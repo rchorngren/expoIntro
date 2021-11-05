@@ -7,8 +7,18 @@ import { TextButton } from "../../Components/TextButton";
 
 import Logo from "../../../assets/roosterhead.svg";
 import { DemoContext } from "../../context/DemoContext";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { StackScreen } from "../../helpers/types";
 
-export const MainScreen: React.FC = (props: any) => {
+// interface IMainScreen {
+//   navigationProps: NativeStackScreenProps<StackScreen, "MainScreen">
+// }
+
+interface IMainScreen extends NativeStackScreenProps<StackScreen, 'MainScreen'> {
+
+}
+
+export const MainScreen: React.FC<IMainScreen> = (props) => {
   const context = React.useContext(DemoContext);
   const [hidePassword, setHidePassword] = useState<boolean>(true);
   const [password, setPassword] = useState<string>("");
@@ -52,7 +62,6 @@ export const MainScreen: React.FC = (props: any) => {
           <Entry
             label="Password"
             isPassword={hidePassword}
-            // onTextChange={(text) => setPassword(text)}
             onTextChange={(text) => context?.setAnotherText(text)}
             defaultValue={context?.anotherText}
           />
@@ -64,8 +73,7 @@ export const MainScreen: React.FC = (props: any) => {
               await savePassword();
               const retrievedPassword = await getPassword();
               if (retrievedPassword) {
-                // alert(retrievedPassword);
-                props.navigation.navigate("HomeScreen");
+                props.navigation.navigate("HomeScreen", { userId: 12 })
               }
             }}
           />
@@ -100,6 +108,5 @@ const styles = StyleSheet.create({
   loginContainer: {
     flex: 0.5,
     paddingHorizontal: 25,
-    backgroundColor: "white",
   },
 });
