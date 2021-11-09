@@ -10,12 +10,7 @@ import { DemoContext } from "../../context/DemoContext";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StackScreen } from "../../helpers/types";
 
-// interface IMainScreen {
-//   navigationProps: NativeStackScreenProps<StackScreen, "MainScreen">
-// }
-
 interface IMainScreen extends NativeStackScreenProps<StackScreen, 'MainScreen'> {
-
 }
 
 export const MainScreen: React.FC<IMainScreen> = (props) => {
